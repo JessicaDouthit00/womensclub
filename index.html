@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Berea Women's Club</title>
+  <title>Berea Women’s Club</title>
 
-  <!-- React + Babel -->
+  <!-- React and Babel -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -19,6 +19,7 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     body {
       margin: 0;
       height: 100vh;
@@ -29,120 +30,99 @@
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root" class="flex flex-col min-h-screen justify-center items-center text-white"></div>
 
   <script type="text/babel">
-    const Footer = () => (
-      <div className="text-center text-xs text-white mt-8 mb-4">
-        Website by <a href="https://www.linkedin.com/in/jessicadouthit" target="_blank" className="underline">Jessica Douthit</a>
-      </div>
-    );
+    const { useState } = React;
 
     function App() {
-      const [view, setView] = React.useState("home");
+      const [page, setPage] = useState("home");
 
-      if (view === "history") {
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        fetch("https://script.google.com/macros/s/AKfycbxhQi040O1xlQxuMXMwqSeGv-bVJFDb6a__W0lPbTwBoBFt0pPCXlB0SGnEr3K0Wwcq/exec", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.result === "success") {
+            alert("Form submitted successfully!");
+            e.target.reset();
+          } else {
+            alert("Failed to submit form.");
+          }
+        })
+        .catch(error => {
+          alert("Error submitting form.");
+          console.error(error);
+        });
+      };
+
+      const Footer = () => (
+        <footer className="absolute bottom-4 text-sm text-white">
+          Website by <a href="https://www.linkedin.com/in/jessicadouthit" target="_blank" rel="noopener noreferrer" className="underline">Jessica Douthit</a>
+        </footer>
+      );
+
+      if (page === "history") {
         return (
-          <>
-            <div className="flex flex-col items-center justify-center min-h-screen text-white px-6 py-12">
-              <div className="bg-black bg-opacity-80 p-8 rounded-xl max-w-3xl text-center">
-                <h2 className="text-3xl font-bold mb-6">Our History</h2>
-                <p className="text-white text-sm leading-relaxed">
-                  Berea Women’s Club was organized on June 19, 1919 at the Berea Baptist Church by a group of women from the Berea community.
-                  The purpose of the organization “was to bring together women of this area of Madison County for mutual counsel and helpfulness and create a united effort for the welfare of the community while contributing to the best interests of humanity as a whole” (Engle, F. 2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register).
-                  <br /><br />
-                  According to Fred Engle, “(t)he first meeting of the Club was called to order by Mrs. W. J. Herndon, president of the Berea Progress Club.
-                  Elected for two years terms were the following officers – President, Mrs. Scott T. McGuire; First Vice President, Mrs. William J. Baird;
-                  Second Vice President, Mrs. J. J. Osborne; Recording Secretary, Mrs. George G. Dick; Corresponding Secretary, Mrs. W. G. Best; and Treasurer,
-                  Mrs. Frank M. Livingood. Mrs. R. J. Crowley chaired the constitutional committee. There were 49 charter members, and by the end of the first year
-                  membership in the club was over 100” (Engle, F. 2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register).
-                </p>
-                <div className="mt-6">
-                  <button onClick={() => setView("home")} className="px-4 py-2 bg-purple-700 rounded hover:bg-purple-600">Back</button>
-                </div>
-              </div>
+          <div className="flex flex-col justify-center items-center min-h-screen px-6 text-center">
+            <div className="bg-black bg-opacity-70 p-6 rounded-lg max-w-2xl">
+              <h2 className="text-3xl font-bold mb-6">Our History</h2>
+              <p className="mb-4">
+                Berea Women’s Club was organized on June 19, 1919 at the Berea Baptist Church by a group of women from the Berea community...
+              </p>
+              <p>
+                According to Fred Engle, “(t)he first meeting of the Club was called to order by Mrs. W. J. Herndon...”
+              </p>
             </div>
             <Footer />
-          </>
+          </div>
         );
       }
 
-      if (view === "join") {
+      if (page === "join") {
         return (
-          <>
-            <div className="flex flex-col items-center justify-center min-h-screen text-white px-4">
-              <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-4 text-center">Join Us</h2>
-                <form
-                  action="https://script.google.com/macros/s/AKfycbyKRp4YrcWCs8y0yUqHzV0aqCEHD30yCmOvTeiKra1rQVkXxIcKimT-lT6do6TpdHhLEw/exec"
-                  method="POST"
-                  className="space-y-4"
-                >
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    required
-                    className="w-full px-4 py-2 rounded bg-gray-100 text-black"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                    className="w-full px-4 py-2 rounded bg-gray-100 text-black"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone"
-                    required
-                    className="w-full px-4 py-2 rounded bg-gray-100 text-black"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full bg-purple-600 hover:bg-purple-500 transition px-4 py-2 rounded text-white font-semibold"
-                  >
-                    Submit
-                  </button>
-                </form>
-                <div className="flex justify-center mt-6">
-                  <button
-                    onClick={() => setView("home")}
-                    className="px-4 py-2 bg-gray-800 hover:bg-gray-700 transition rounded"
-                  >
-                    Back
-                  </button>
-                </div>
-              </div>
+          <div className="flex flex-col justify-center items-center min-h-screen px-6 text-center">
+            <div className="bg-black bg-opacity-70 p-6 rounded-lg max-w-md w-full">
+              <h2 className="text-3xl font-bold mb-4">Join Us</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <input type="text" name="name" required placeholder="Name" className="w-full p-2 rounded" />
+                <input type="email" name="email" required placeholder="Email" className="w-full p-2 rounded" />
+                <input type="tel" name="phone" placeholder="Phone" className="w-full p-2 rounded" />
+                <button type="submit" className="w-full bg-purple-600 hover:bg-purple-800 p-2 rounded text-white font-bold">
+                  Sign Up
+                </button>
+              </form>
             </div>
             <Footer />
-          </>
+          </div>
         );
       }
 
+      // Home page with circular navigation
       return (
-        <div className="flex flex-col justify-center items-center h-screen text-white">
+        <div className="text-center">
           <h1 className="text-4xl font-bold mb-10">Berea Women's Club</h1>
-          <div className="flex justify-center space-x-16">
+          <div className="flex justify-center space-x-12">
             <div
-              onClick={() => setView("history")}
-              className="w-36 h-36 rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 flex items-center justify-center text-white font-bold"
-              title="History"
+              onClick={() => setPage("history")}
+              className="w-32 h-32 flex justify-center items-center rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 shadow-lg text-white font-semibold"
             >
               History
             </div>
             <div
-              onClick={() => setView("join")}
-              className="w-36 h-36 rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 flex items-center justify-center text-white font-bold"
-              title="Join"
+              onClick={() => setPage("join")}
+              className="w-32 h-32 flex justify-center items-center rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 shadow-lg text-white font-semibold"
             >
               Join
             </div>
             <div
-              onClick={() => window.location.href='https://example.com/page3'}
-              className="w-36 h-36 rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 flex items-center justify-center text-white font-bold"
-              title="Activities"
+              onClick={() => window.location.href = 'https://example.com/page3'}
+              className="w-32 h-32 flex justify-center items-center rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 shadow-lg text-white font-semibold"
             >
               Activities
             </div>
@@ -152,7 +132,7 @@
       );
     }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
