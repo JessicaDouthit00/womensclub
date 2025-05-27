@@ -2,69 +2,201 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Berea Women's Club</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans&display=swap" rel="stylesheet">
+
+  <!-- React and Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
   <style>
-    body {
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    html, body {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background-color: #fdfdfd;
-      color: #333;
+      height: 100%;
     }
-    header {
-      background-color: #8c2f39;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-    }
-    .content {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      color: #8c2f39;
-      font-family: 'Playfair Display', serif;
-    }
-    p {
-      line-height: 1.6;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #eee;
-      font-size: 0.9rem;
-      margin-top: 2rem;
+
+    #root {
+      height: 100vh;
+      background: linear-gradient(270deg, #a855f7, #ec4899, #ef4444);
+      background-size: 600% 600%;
+      animation: gradientShift 15s ease infinite;
+      overflow: auto;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Berea Women's Club</h1>
-    <p>Empowering Women, Enriching Community</p>
-  </header>
+  <div id="root"></div>
 
-  <div class="content">
-    <h2>Our History</h2>
-    <p>
-      Berea Women’s Club was organized on June 19, 1919 at the Berea Baptist Church by a group of women from the Berea community.  The purpose of the organization “was to bring together women of this area of Madison County for mutual counsel and helpfulness and create a united effort for the welfare of the community while contributing to the best interests of humanity as a whole” (Engle, F.  2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register. Retrieved from: <a href="http://richmondregister.com/lifestylescommunity/x530793737/The-Berea-Women-s-Club-and-the-Echo-Club/print" target="_blank">The Richmond Register</a>).
-    </p>
-    <p>
-      According to Fred Engle, “(t)he first meeting of the Club was called to order by Mrs. W. J. Herndon, president of the Berea Progress Club.  Elected for two years terms were the following officers – President, Mrs. Scott T. McGuire; First Vice President, Mrs. William J. Baird; Second Vice President, Mrs. J. J. Osborne; Recording Secretary, Mrs. George G. Dick; Corresponding Secretary, Mrs. W. G. Best; and Treasurer, Mrs. Frank M. Livingood. Mrs. R. J. Crowley chaired the constitutional committee.  There were 49 charter members, and by the end of the first year membership in the club was over 100” (Engle, F. 2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register. Retrieved from: <a href="http://richmondregister.com/lifestylescommunity/x530793737/The-Berea-Women-s-Club-and-the-Echo-Club/print" target="_blank">The Richmond Register</a>).
-    </p>
-  </div>
+  <script type="text/babel">
+    function App() {
+      const [view, setView] = React.useState("home");
+      const [formData, setFormData] = React.useState({ name: "", email: "", phone: "" });
+      const [submitted, setSubmitted] = React.useState(false);
 
-  <footer>
-    &copy; 2025 Berea Women's Club | All rights reserved
-  </footer>
+      const historyText = `
+Berea Women’s Club was organized on June 19, 1919 at the Berea Baptist Church by a group of women from the Berea community. 
+The purpose of the organization “was to bring together women of this area of Madison County for mutual counsel and helpfulness 
+and create a united effort for the welfare of the community while contributing to the best interests of humanity as a whole” 
+(Engle, F. 2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register. Retrieved from: The Richmond Register).
+
+According to Fred Engle, “(t)he first meeting of the Club was called to order by Mrs. W. J. Herndon, president of the Berea Progress Club. 
+Elected for two years terms were the following officers – President, Mrs. Scott T. McGuire; First Vice President, Mrs. William J. Baird; 
+Second Vice President, Mrs. J. J. Osborne; Recording Secretary, Mrs. George G. Dick; Corresponding Secretary, Mrs. W. G. Best; and Treasurer, 
+Mrs. Frank M. Livingood. Mrs. R. J. Crowley chaired the constitutional committee. There were 49 charter members, and by the end of the first 
+year membership in the club was over 100” (Engle, F. 2011 January 1. The Berea Women’s Club and the Echo Club, The Richmond Register. 
+Retrieved from: The Richmond Register).
+      `;
+
+      const handleClick = (type) => setView(type.toLowerCase());
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+      };
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitted(true);
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyKRp4YrcWCs8y0yUqHzV0aqCEHD30yCmOvTeiKra1rQVkXxIcKimT-lT6do6TpdHhLEw/exec';
+
+        try {
+          await fetch(scriptURL, {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+          });
+          alert("Signup successful!");
+          setFormData({ name: "", email: "", phone: "" });
+        } catch (err) {
+          alert("Failed to submit form. Please try again.");
+          console.error(err);
+        } finally {
+          setSubmitted(false);
+        }
+      };
+
+      if (view === "history") {
+        return (
+          <div className="w-full flex justify-center px-4 py-12">
+            <div className="bg-black bg-opacity-80 text-white p-8 rounded-xl max-w-4xl w-full shadow-lg">
+              <h2 className="text-3xl font-bold mb-4 text-center">History</h2>
+              <p className="whitespace-pre-line leading-relaxed text-lg">{historyText}</p>
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setView("home")}
+                  className="px-6 py-2 bg-gray-800 hover:bg-gray-700 transition rounded"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (view === "join") {
+        return (
+          <div className="w-full flex justify-center px-4 py-12">
+            <div className="bg-black bg-opacity-80 text-white p-8 rounded-xl max-w-md w-full shadow-lg">
+              <h2 className="text-3xl font-bold mb-6 text-center">Join Us</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-2 rounded bg-white text-black"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-2 rounded bg-white text-black"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-2 rounded bg-white text-black"
+                />
+                <button
+                  type="submit"
+                  disabled={submitted}
+                  className="w-full bg-purple-600 hover:bg-purple-500 transition px-4 py-2 rounded text-white font-bold"
+                >
+                  {submitted ? "Submitting..." : "Sign Up"}
+                </button>
+              </form>
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => setView("home")}
+                  className="px-6 py-2 bg-gray-800 hover:bg-gray-700 transition rounded"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (view === "activities") {
+        return (
+          <div className="w-full flex justify-center px-4 py-12">
+            <div className="bg-black bg-opacity-80 text-white p-8 rounded-xl max-w-2xl w-full shadow-lg text-center">
+              <h2 className="text-3xl font-bold mb-4">Activities</h2>
+              <p className="text-lg">We currently meeat for lunch about once a week. More information coming soon!</p>
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => setView("home")}
+                  className="px-6 py-2 bg-gray-800 hover:bg-gray-700 transition rounded"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Home view
+      return (
+        <div className="h-full flex flex-col justify-center items-center text-white text-center px-4">
+          <h1 className="text-4xl font-bold mb-10">Berea Women's Club</h1>
+          <div className="flex justify-center space-x-12 flex-wrap">
+            {["History", "Join", "Activities"].map((label) => (
+              <div
+                key={label}
+                onClick={() => handleClick(label)}
+                className="w-36 h-36 rounded-full bg-black cursor-pointer hover:bg-gray-700 transition transform hover:scale-105 shadow-lg flex items-center justify-center text-lg font-semibold m-4"
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
